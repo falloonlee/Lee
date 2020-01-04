@@ -1,0 +1,26 @@
+#include "stdio.h"
+#include "string.h"
+#include "stdlib.h"
+
+struct lianbiao 
+{
+  int hour;//时
+  int min;//分
+  int sec;//秒
+  int sex; //性别
+  struct lianbiao *front; //前驱指针
+  struct lianbiao *back;// 后驱指针
+};
+viod get(char mn[10],char *pm) //获取输入字符。
+{
+  while(1)
+  {
+    *pm=getchar();
+    if(*pm=='\n') //检测到回车
+      {
+        *pm='\0'; //把回车替换成字符串终止符然后跳出
+        break;
+      }
+      pm++;
+  }
+}
