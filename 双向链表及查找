@@ -7,7 +7,7 @@ struct lianbiao
   int hour;//时
   int min;//分
   int sec;//秒
-  int sex; //性别
+  char sex[10]; //性别
   struct lianbiao *front; //前驱指针
   struct lianbiao *back;// 后驱指针
 };
@@ -45,9 +45,9 @@ struct lianbiao *find(char mn[10],struct lianbiao *Head,struct lianbiao *p)//定
     p=Head->back;    
     do
     {
-      if(p->sex)//sex 非0时 为男性
+      if(p->sex=="man")//sex 非0时 为男性
         nos[1]++; //男性人数加1
-      else
+      else if(p->sex=="woman")
         nos[0]++; // 女性人数加1
     }while(p->back!=Head->back);
     return nos;
@@ -65,9 +65,12 @@ struct lianbiao *find(char mn[10],struct lianbiao *Head,struct lianbiao *p)//定
   do  //do while 赋值
   {
   Tail=calloc(1,sizeof(struct lianbiao));//初始化Tail指针
-  printf("请输入签到人的姓名与性别：性别0为女性，1为男性。\n");
-  scanf("%s %d",Tail->name,Tail->sex);//获取姓名 和性别 已空格隔开
-  gechar();
+  printf("请输入签到人的姓名\n");
+  scanf("%s",Tail->name);//获取姓名
+  if(Tail->name=="exit") //检查姓名是否是exit
+    break;
+  printf("请输入签到人的性别\n");
+  scanf("%s",Tail->sex);//获取性别
   time(&t);//获取本地时间
   tnow=localtime(&t); //获取本地时间
   Tail->hour=tnow->hour;  //时间赋值
@@ -76,28 +79,30 @@ struct lianbiao *find(char mn[10],struct lianbiao *Head,struct lianbiao *p)//定
   Tail->front=p;    // 当前地址前驱变为上一个地址p
   p->back=Tail;   // 上一个地址的前驱变为当前地址
   p=Tail;    //最后 吧上一个地址变更 为当前地址。
-  }while(Tail->name!="exit");
-  Tail->back=Head;//双向链表 尾部的后一个地址指向头部
-  Head->front=Tail;//双向链表，头部的前一个地址指向尾部
+  }while(1);
+  free(Tail);//释放name=exit 的地址
+  p->back=Head;//双向链表 实际上尾部的后一个地址指向头部
+  Head->front=p;//双向链表，头部的前一个地址指向实际尾部
+  Tail=p;
   //—————————————————————————————————双向链表创建成功—————————————————————————————————————//
   get(mn);
   p=find(mn,Head,p);
-  if(p->sex!=0)
+  if(p->sex=="man")
     printf("查询到%s性别男的签到时间是：%d:%d:%d\n",p->name,p->hour,p->min,p->sec);
-  else
+  else if (p->sex=="woman")
     printf("查询到%s性别女的签到时间是：%d:%d:%d\n",p->name,p->hour,p->min,p->sec);
   nun(nos,Head,p);
   printf("查询到男性共计%d位，女性%d位",nos[1],nos[0]);
-  /*
+ 
   get(mn);
   Head=p=find(mn,Head,p);
   do{
-  if(p->sex!=0)
+  if(p->sex=="man")
     printf("查询到%s性别男的签到时间是：%d:%d:%d\n",p->name,p->hour,p->min,p->sec);
-  else
+  else if (p->sex=="woman")
     printf("查询到%s性别女的签到时间是：%d:%d:%d\n",p->name,p->hour,p->min,p->sec);
   p=p->front;
   }while(p->front!=Head->front);
-  */
+
   return 0;
   }
