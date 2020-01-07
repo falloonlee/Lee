@@ -27,6 +27,7 @@ viod get(char mn[10]) //获取输入字符。
       pm++;
   }
 }
+  //—————————————————————————————————链表内查找名字—————————————————————————————————————//
 struct lianbiao *find(char mn[10],struct lianbiao *Head,struct lianbiao *p)//定义查找链表函数
 {
   p=Head->back;
@@ -40,6 +41,7 @@ struct lianbiao *find(char mn[10],struct lianbiao *Head,struct lianbiao *p)//定
   }while(p->back!=Head->back); //当循环完毕后跳出
   return NULL;  //循环完毕都不能找到给定字符串 反馈地址为空。
   }
+    //—————————————————————————————————分性别计数—————————————————————————————————————//
   int nun(int nos[2],struct lianbiao *Head,struct lianbiao *p)
   {
     p=Head->back;    
@@ -52,7 +54,14 @@ struct lianbiao *find(char mn[10],struct lianbiao *Head,struct lianbiao *p)//定
     }while(p->back!=Head->back);
     return nos;
   }
-  
+  //—————————————————————————————————链表内删除节点—————————————————————————————————————//
+  void del(struct lianbiao *p)
+ {
+  p->front->back=p->back;//目标前一个节点的后驱指向目标的后一个节点；
+  p->back->front=p->front;//目标的后一个节点的前驱指向目标的前一个节点；
+  free(p);//释放目标节点的空间
+ }
+  //—————————————————————————————————主函数—————————————————————————————————————// 
   int main()
   {
   int nos[2]={0};
@@ -103,6 +112,15 @@ struct lianbiao *find(char mn[10],struct lianbiao *Head,struct lianbiao *p)//定
     printf("查询到%s性别女的签到时间是：%d:%d:%d\n",p->name,p->hour,p->min,p->sec);
   p=p->front;
   }while(p->front!=Head->front);
-
+  printf("请输入需要删除的节点的name字段的值：\n");
+  get(mn);
+  p=find(mn,Head,p);
+  del(p);
+  p=Head->back;
+  do
+  {
+  pirntf("%s性别%s的签到时间是：%d:%d:%d\n",p->name,p->sex,p->hour,p->min,p->sec);
+  p=p->back;
+  }while(p->back!=Head->back)
   return 0;
   }
